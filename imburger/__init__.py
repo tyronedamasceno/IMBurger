@@ -20,4 +20,10 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
-from imburger import routes
+from imburger.accounts.routes import accounts as accounts_bp
+from imburger.orders.routes import orders as orders_bp
+from imburger.main.routes import main as main_bp
+
+app.register_blueprint(accounts_bp)
+app.register_blueprint(orders_bp)
+app.register_blueprint(main_bp)
