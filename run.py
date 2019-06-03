@@ -1,4 +1,4 @@
-from imburguer import create_app
+from imburger import create_app
 
 app = create_app()
 

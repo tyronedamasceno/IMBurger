@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
-from imburguer.config import Config
+from imburger.config import Config
 
 
 db = SQLAlchemy()
@@ -23,8 +23,8 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
 
-    from imburguer.main.routes import main
-    from imburguer.errors.handlers import errors
+    from imburger.main.routes import main
+    from imburger.errors.handlers import errors
     app.register_blueprint(main)
     app.register_blueprint(errors)
 
