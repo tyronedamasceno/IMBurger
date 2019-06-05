@@ -23,8 +23,10 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
 
+    from imburger.users.routes import users
     from imburger.main.routes import main
     from imburger.errors.handlers import errors
+    app.register_blueprint(users)
     app.register_blueprint(main)
     app.register_blueprint(errors)
 

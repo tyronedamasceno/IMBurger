@@ -12,18 +12,8 @@
       Ainda não possui uma conta? Crie uma agora de maneira simples e rápida.
     </p>
     <p class="lead">
-      <a
-        class="btn btn-success btn-lg mt-2"
-        href="{{ url_for('main.home') }}"
-        role="button"
-        >Criar Conta</a
-      >
-      <a
-        class="btn btn-primary btn-lg mt-2"
-        href="{{ url_for('main.about') }}"
-        role="button"
-        >Já possuo uma conta</a
-      >
+      <a class="btn btn-success btn-lg mt-2" href="{{ url_for('users.register') }}" role="button">Criar Conta</a>
+      <a class="btn btn-primary btn-lg mt-2" href="{{ url_for('users.login') }}" role="button">Já possuo uma conta</a>
     </p>
   </div>
 </div>
