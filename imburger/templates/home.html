@@ -1,1 +1,89 @@
-{% extends "layout.html" %} {% block content %} home {% endblock content %}
+{% extends "layout.html" %} {% block content %}
+
+<div class="container">
+  <div class="jumbotron mt-4">
+    <h1 class="display-5">Conheça o ImBurgeria Delivery</h1>
+    <p class="lead">
+      A ImBurgeria Delivery oferece os melhores produtos pelos menores preços.
+      Navegue pelo site para conhecer nossas ofertas!
+    </p>
+    <hr class="my-4" />
+    <p>
+      Ainda não possui uma conta? Crie uma agora de maneira simples e rápida.
+    </p>
+    <p class="lead">
+      <a
+        class="btn btn-success btn-lg mt-2"
+        href="{{ url_for('main.home') }}"
+        role="button"
+        >Criar Conta</a
+      >
+      <a
+        class="btn btn-primary btn-lg mt-2"
+        href="{{ url_for('main.about') }}"
+        role="button"
+        >Já possuo uma conta</a
+      >
+    </p>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div id="produtos-wrapper">
+    <div class="p-3 mb-2 bg-success text-white">
+      <h1 style="font-size: 20px;">Nossos produtos...</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-12 my-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Coca Cola 1 Litro</h4>
+            <p class="card-text">1 litro de coca cola</p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 18px;">R$ 2,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-dark">
+              <i class="fas fa-plus mr-2"></i>Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Hamburger Convencional</h4>
+            <p class="card-text">2 pães, 1 carne bovina e 1 salada</p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 18px;">R$ 6,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-dark">
+              <i class="fas fa-plus mr-2"></i>Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class=" col-md-12 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Hamburguer X2</h4>
+            <p class="card-text">2 pães, 2 carnes bovinas, 1 salada</p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 18px;">R$ 2,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-dark">
+              <i class="fas fa-plus mr-2"></i>Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
