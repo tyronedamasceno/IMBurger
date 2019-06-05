@@ -1,2 +1,82 @@
-{% extends "layout.html" %} {% block content %} register page {% endblock
+{% extends "layout.html" %} {% block content %} <main class="login-form mt-4">
+  <div class="cotainer">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card">
+          <div class="card-header">
+            <h1 style="font-size: 1.2rem;">Crie sua conta. É fácil e rápido!</h1>
+          </div>
+          <div class="card-body">
+            <form action="" method="">
+
+              <div class="form-group row">
+                <label for="name" class="col-md-4 col-form-label text-md-right">Nome</label>
+                <div class="col-md-8">
+                  <input type="text" id="name" class="form-control" name="name" placeholder="Digite seu nome" required
+                    autofocus>
+                  <div class="invalid-input-feedback">
+                    Nome invalido.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
+                <div class="col-md-8">
+                  <input type="text" id="username" class="form-control" name="username" placeholder="Digite seu username"
+                    required autofocus>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="username" class="col-md-4 col-form-label text-md-right">Endereço</label>
+                <div class="col-md-8">
+                  <input type="text" id="address" class="form-control" name="address" placeholder="Rua, numero, complemento..."
+                    required autofocus>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="email_address" class="col-md-4 col-form-label text-md-right">Email:</label>
+                <div class="col-md-8">
+                  <input type="text" id="email_address" class="form-control" name="email-address" placeholder="Digite seu email"
+                    required autofocus>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="password" class="col-md-4 col-form-label text-md-right">Senha:</label>
+                <div class="col-md-8">
+                  <input type="password" id="password" class="form-control" name="password" placeholder="Digite sua senha"
+                    required>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="password" class="col-md-4 col-form-label text-md-right">Confirme sua senha:</label>
+                <div class="col-md-8">
+                  <input type="password" id="password" class="form-control" name="password" placeholder="Digite sua senha novamente"
+                    required>
+                  <div class="invalid-input-feedback">
+                    As senhas digitadas não são iguais
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 offset-md-4">
+                <button type="submit" class="btn btn-success">
+                  Criar Conta
+                </button>
+                <a href="#" class="btn btn-link">
+                  Já possui uma conta?
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main> {% endblock
 content %}
