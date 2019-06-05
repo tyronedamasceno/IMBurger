@@ -40,6 +40,16 @@ class User(db.Model, UserMixin):
         db.String(60),
         nullable=False
     )
+    employee = db.relationship(
+        'Employee',
+        backref='user',
+        lazy=True
+    )
+    customer = db.relationship(
+        'Customer',
+        backref='user',
+        lazy=True
+    )
 
 
 class Employee(db.Model):
@@ -85,3 +95,41 @@ class Customer(db.Model):
         db.ForeignKey('address.id'),
         nullable=True
     )
+
+
+class Address(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    street = db.Column(
+        db.String(100),
+        unique=False,
+        nullable=False
+    )
+    number = db.Column(
+        db.String(10),
+        unique=False,
+        nullable=False
+    )
+    zipcode = db.Column(
+        db.String(10),
+        unique=False,
+        nullable=True
+    )
+    neighborhood = db.Column(
+        db.String(100),
+        unique=False,
+        nullable=True
+    )
+    city = db.Column(
+        db.String(100),
+        unique=False,
+        nullable=True
+    )
+    customer = db.relationship(
+        'Customer',
+        backref='user',
+        lazy=True
+    )
+
