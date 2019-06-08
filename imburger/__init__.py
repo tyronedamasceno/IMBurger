@@ -6,28 +6,26 @@ from flask_mail import Mail
 from imburger.config import Config
 
 
-db = SQLAlchemy()
-bcrypt = Bcrypt()
-login_manager = LoginManager()
+app = Flask(__name__)
+app.config.from_object(Config)
+
+db = SQLAlchemy(app)
+from imburger import models
+db.drop_all()
+db.create_all()
+
+bcrypt = Bcrypt(app)
+
+login_manager = LoginManager(app)
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
-mail = Mail()
 
+mail = Mail(app)
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(Config)
+from imburger.users.routes import users as users_bp
+from imburger.main.routes import main as main_bp
+from imburger.errors.handlers import errors as errors_bp
 
-    db.init_app(app)
-    bcrypt.init_app(app)
-    login_manager.init_app(app)
-    mail.init_app(app)
-
-    from imburger.users.routes import users
-    from imburger.main.routes import main
-    from imburger.errors.handlers import errors
-    app.register_blueprint(users)
-    app.register_blueprint(main)
-    app.register_blueprint(errors)
-
-    return app
+app.register_blueprint(users_bp)
+app.register_blueprint(errors_bp)
+app.register_blueprint(main_bp)
