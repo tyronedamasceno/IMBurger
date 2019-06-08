@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask_login import UserMixin
 
-from imburger import db, login_manager
+from imburger import db
 
 
 class User(db.Model, UserMixin):
@@ -39,16 +39,16 @@ class User(db.Model, UserMixin):
         db.String(60),
         nullable=False
     )
-    # employee = db.relationship(
-    #     'Employee',
-    #     backref='user',
-    #     lazy=True
-    # )
-    # customer = db.relationship(
-    #     'Customer',
-    #     backref='user',
-    #     lazy=True
-    # )
+    employee = db.relationship(
+        'Employee',
+        backref='user',
+        lazy=True
+    )
+    customer = db.relationship(
+        'Customer',
+        backref='user',
+        lazy=True
+    )
 
 
 class Employee(db.Model):
@@ -66,11 +66,11 @@ class Employee(db.Model):
         default=False,
         nullable=False
     )
-    # user_id = db.Column(
-    #     db.Integer,
-    #     db.ForeignKey('user.id'),
-    #     nullable=False
-    # )
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
 
 
 class Customer(db.Model):
@@ -84,16 +84,16 @@ class Customer(db.Model):
         unique=False,
         nullable=False
     )
-    # user_id = db.Column(
-    #     db.Integer,
-    #     db.ForeignKey('user.id'),
-    #     nullable=False
-    # )
-    # address_id = db.Column(
-    #     db.Integer,
-    #     db.ForeignKey('address.id'),
-    #     nullable=True
-    # )
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+    address_id = db.Column(
+        db.Integer,
+        db.ForeignKey('address.id'),
+        nullable=True
+    )
 
 
 class Address(db.Model):
@@ -126,9 +126,17 @@ class Address(db.Model):
         unique=False,
         nullable=True
     )
-    # customer = db.relationship(
-    #     'Customer',
-    #     backref='user',
-    #     lazy=True
-    # )
+    customer = db.relationship(
+        'Customer',
+        backref='address',
+        lazy=True
+    )
+
+
+# class Oder(db.Model):
+#     id = db.Column(
+#         db.Integer,
+#         primary_key=True
+#     )
+#     customer = 
 

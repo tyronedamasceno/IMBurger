@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
+from imburger import models
 db.drop_all()
 db.create_all()
 
