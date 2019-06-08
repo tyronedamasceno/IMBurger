@@ -1,6 +1,5 @@
-from imburger import create_app
+from imburger import app
 
-app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
