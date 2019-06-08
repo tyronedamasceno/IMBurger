@@ -6,8 +6,8 @@ from flask_mail import Mail
 from imburger.config import Config
 
 
-app.config.from_object(Config)
 app = Flask(__name__)
+app.config.from_object(Config)
 
 db = SQLAlchemy(app)
 db.drop_all()
