@@ -94,6 +94,11 @@ class Customer(db.Model):
         db.ForeignKey('address.id'),
         nullable=True
     )
+    order = db.relationship(
+        'Order',
+        backref='customer',
+        lazy=True
+    )
 
 
 class Address(db.Model):
@@ -133,10 +138,127 @@ class Address(db.Model):
     )
 
 
-# class Oder(db.Model):
-#     id = db.Column(
-#         db.Integer,
-#         primary_key=True
-#     )
-#     customer = 
+class Order(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    # 0 = Preparing
+    # 1 = Delivering
+    # 2 = Cancelled
+    # 3 = Finished
+    status = db.Column(
+        db.Integer,
+        nullable=False,
+        default=0
+    )
+    customer_id = db.Column(
+        db.Integer,
+        db.ForeignKey('customer.id'),
+        nullable=False
+    )
 
+
+class Product(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    name = db.Column(
+        db.String(50),
+        unique=False,
+        nullable=False
+    )
+    price = db.Column(
+        db.Float,
+        nullable=False,
+        default=0
+    )
+    description = db.Column(
+        db.String(100),
+        unique=False,
+        nullable=True
+    )
+
+
+class Ingredient(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    name = db.Column(
+        db.String(50),
+        unique=False,
+        nullable=False
+    )
+    unit_measuring = db.Column(
+        db.String(50),
+        unique=False,
+        nullable=False
+    )
+    stock = db.relationship(
+        'Stock',
+        backref='ingredient',
+        lazy=True
+    )
+
+
+class Stock(db.Model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    quantity = db.Column(
+        db.Float,
+        nullable=False,
+        default=0
+    )
+    ingredient_id = db.Column(
+        db.Integer,
+        db.ForeignKey('ingredient.id'),
+        nullable=False
+    )
+
+
+products_ingredients = db.Table(
+    'products_ingredients',
+    db.Column(
+        'product_id',
+        db.Integer,
+        db.ForeignKey('product.id'),
+        primary_key=True
+    ),
+    db.Column(
+        'ingredient_id',
+        db.Integer,
+        db.ForeignKey('ingredient.id'),
+        primary_key=True
+    )
+)
+
+order_products = db.Table(
+    'order_products',
+    db.Column(
+        'product_id',
+        db.Integer,
+        db.ForeignKey('product.id'),
+        primary_key=True
+    ),
+    db.Column(
+        'order_id',
+        db.Integer,
+        db.ForeignKey('order.id'),
+        primary_key=True
+    ),
+    db.Column(
+        'quantity',
+        db.Integer,
+        nullable=False,
+        default=1
+    ),
+    db.Column(
+        'notes',
+        db.String(100),
+        nullable=True
+    )
+)
