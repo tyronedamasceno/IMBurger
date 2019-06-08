@@ -39,4 +39,28 @@ def register():
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html', title='Fazer Login')
+    if current_user.is_authenticated:
+        flash('You are already logged in!', 'warning')
+        return redirect(url_for('main.index'))
+
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(
+            user.password, form.password.data
+        ):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            flash(f'You have been logged in!', 'success')
+            return (
+                redirect(next_page) if next_page
+                else redirect(url_for('main.index'))
+            )
+        else:
+            flash(
+                'Login Unsucessful. Please check email and password',
+                'danger'
+            )
+    return render_template('login.html', title='login', form=form)
+
+            
