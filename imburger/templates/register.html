@@ -7,93 +7,216 @@
             <h1 style="font-size: 1.2rem;">Crie sua conta. É fácil e rápido!</h1>
           </div>
           <div class="card-body">
-            <form action="" method="">
-
+            <form method="POST" action="">
+              {{ form.hidden_tag() }}
               <div class="form-group row">
-                <label for="name" class="col-md-4 col-form-label text-md-right">Nome</label>
+                {{ form.given_name.label(class="col-md-4 col-form-label text-md-right") }}
+
                 <div class="col-md-8">
-                  <input type="text" id="name" class="form-control" name="name" placeholder="Digite seu nome" required
-                    autofocus>
+                  {% if form.given_name.errors %}
+                  {{ form.given_name(class="form-control is-invalid") }}
                   <div class="invalid-input-feedback">
-                    Nome invalido.
+                    {% for error in form.given_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
                   </div>
+                  {% else %}
+                  {{ form.given_name(class="form-control") }}
+                  {% endif %}
                 </div>
               </div>
 
               <div class="form-group row">
-                <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
-                <div class="col-md-8">
-                  <input type="text" id="username" class="form-control" name="username"
-                    placeholder="Digite seu username" required autofocus>
-                </div>
-              </div>
+                {{ form.surname.label(class="col-md-4 col-form-label text-md-right") }}
 
-              <div class="form-group row">
-                <label for="street" class="col-md-4 col-form-label text-md-right">Rua</label>
                 <div class="col-md-8">
-                  <input type="text" id="address" class="form-control" name="address" placeholder="Nome da rua" required
-                    autofocus>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="number" class="col-md-4 col-form-label text-md-right">Numero</label>
-                <div class="col-md-8">
-                  <input type="number" id="address" class="form-control" name="address"
-                    placeholder="Numero da casa/apartamento" required autofocus>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="cep" class="col-md-4 col-form-label text-md-right">CEP</label>
-                <div class="col-md-8">
-                  <input type="text" id="address" class="form-control" name="address" placeholder="CEP" required
-                    autofocus>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="neighborhood" class="col-md-4 col-form-label text-md-right">Bairro</label>
-                <div class="col-md-8">
-                  <input type="text" id="address" class="form-control" name="address" placeholder="Bairro" required
-                    autofocus>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="email_address" class="col-md-4 col-form-label text-md-right">Email:</label>
-                <div class="col-md-8">
-                  <input type="text" id="email_address" class="form-control" name="email-address"
-                    placeholder="Digite seu email" required autofocus>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="password" class="col-md-4 col-form-label text-md-right">Senha:</label>
-                <div class="col-md-8">
-                  <input type="password" id="password" class="form-control" name="password"
-                    placeholder="Digite sua senha" required>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="password" class="col-md-4 col-form-label text-md-right">Confirme sua senha:</label>
-                <div class="col-md-8">
-                  <input type="password" id="password" class="form-control" name="password"
-                    placeholder="Digite sua senha novamente" required>
+                  {% if form.surname.errors %}
+                  {{ form.surname(class="form-control is-invalid") }}
                   <div class="invalid-input-feedback">
-                    As senhas digitadas não são iguais
+                    {% for error in form.surname.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
                   </div>
+                  {% else %}
+                  {{ form.surname(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.username.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.username.errors %}
+                  {{ form.username(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.username.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.username(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                {{ form.street.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.street.errors %}
+                  {{ form.street(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.street.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.street(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.number.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.number.errors %}
+                  {{ form.number(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.number.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.number(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.zipcode.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.zipcode.errors %}
+                  {{ form.zipcode(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.zipcode.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.zipcode(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.neighborhood.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.neighborhood.errors %}
+                  {{ form.neighborhood(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.neighborhood.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.neighborhood(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.email.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.email.errors %}
+                  {{ form.email(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.email.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.email(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.password.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.password.errors %}
+                  {{ form.password(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.password(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.confirm_password.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.confirm_password.errors %}
+                  {{ form.confirm_password(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.confirm_password.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.confirm_password(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.city.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.city.errors %}
+                  {{ form.city(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.city.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.city(class="form-control") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form.registration_number.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.registration_number.errors %}
+                  {{ form.registration_number(class="form-control is-invalid") }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.registration_number.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.registration_number(class="form-control") }}
+                  {% endif %}
                 </div>
               </div>
 
               <div class="col-md-6 offset-md-4">
-                <button type="submit" class="btn btn-success">
-                  Criar Conta
-                </button>
-                <a href="#" class="btn btn-link">
-                  Já possui uma conta?
-                </a>
+                {{ form.submit(class="btn btn btn-success") }}
+                <a class="btn btn-link" href="{{ url_for('users.login') }}">Já possui uma conta</a>
               </div>
             </form>
           </div>
