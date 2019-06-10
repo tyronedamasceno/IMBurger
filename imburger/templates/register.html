@@ -214,6 +214,23 @@
                 </div>
               </div>
 
+              <div class="form-group row">
+                {{ form.user_type.label(class="col-md-4 col-form-label text-md-right") }}
+
+                <div class="col-md-8">
+                  {% if form.user_type.errors %}
+                  {{ form.user_type }}
+                  <div class="invalid-input-feedback">
+                    {% for error in form.user_type.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  {{ form.user_type }}
+                  {% endif %}
+                </div>
+              </div>
+
               <div class="col-md-6 offset-md-4">
                 {{ form.submit(class="btn btn btn-success") }}
                 <a class="btn btn-link" href="{{ url_for('users.login') }}">Já possui uma conta</a>

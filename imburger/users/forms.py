@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import (
     DataRequired, Length, Email, EqualTo, ValidationError
 )
@@ -33,6 +33,7 @@ class RegistrationForm(FlaskForm):
         Length(min=2, max=100, message="Este campo precisa ter entre 2 e 100 caracteres")])
     city = StringField('Cidade', validators=[
         Length(min=2, max=100, message="Este campo precisa ter entre 2 e 100 caracteres")])
+    user_type = SelectField('Tipo de Usuario', choices=[("1","Cliente"),("2","Funcionario"),("3","Administrator")], validators=[])
     submit = SubmitField('Criar conta')
 
     def validate_username(self, username):

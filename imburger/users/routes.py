@@ -14,6 +14,7 @@ users = Blueprint('users', __name__)
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
+
     if current_user.is_authenticated:
         flash('You are already logged in!', 'warning')
         return redirect(url_for('main.home'))
@@ -21,16 +22,28 @@ def register():
     form = forms.RegistrationForm()
 
     if form.validate_on_submit():
+        print ("==============TESTING BEGING ==============")
+        print (form.user_type.data)
+        print ("==============TESTING ENDING ==============")
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
-        user = User(
-            username=form.username.data,
-            given_name=form.given_name.data,
-            surname=form.surname.data,
-            email=form.email.data,
-            password=hashed_password
-        )
-        db.session.add(user)
+
+        # dados para criação do usuario \/
+
+        given_name=form.given_name.data
+        surname=form.surname.data
+        username=form.username.data
+        email=form.email.data
+        password=hashed_password
+        street=form.street.data
+        number=form.number.data
+        zipcode=form.zipcode.data
+        neighborhood=form.neighborhood.data
+        city=form.city.data
+        registration_number=form.registration_number.data
+        user_type=form.user_type.data # 1 = Cliente / 2 = Funcionario / 3 = Administrador
+
+        # db.session.add(user)
         db.session.commit()
         flash('Your account has been successfully created!', 'success')
         return redirect(url_for('main.home'))
@@ -40,7 +53,7 @@ def register():
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        flash('You are already logged in!', 'warning')
+        flash('Você já está logado!', 'warning')
         return redirect(url_for('main.index'))
 
     form = forms.LoginForm()
@@ -51,14 +64,14 @@ def login():
         ):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            flash(f'You have been logged in!', 'success')
+            flash(f'Você logou com sucesso!', 'success')
             return (
                 redirect(next_page) if next_page
                 else redirect(url_for('main.index'))
             )
         else:
             flash(
-                'Login Unsucessful. Please check email and password',
+                'Login  malsucedido. Verifique seu email e senha',
                 'danger'
             )
     return render_template('login.html', title='login', form=form)
