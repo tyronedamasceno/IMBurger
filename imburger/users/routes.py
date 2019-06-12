@@ -74,6 +74,17 @@ def register():
                     insert_customer_sql,
                     promo_points=0, user_id=user_id, address_id=address_id
                 )
+            else:
+                insert_employee_sql = (
+                    'INSERT INTO employee (registration, admin, user_id)'
+                    ' VALUES (:registration, :admin, :user_id)'
+                )
+                conn.execute(
+                    insert_employee_sql,
+                    registration=registration_number, admin=0 if int(user_type) == 2 else 1,
+                    user_id=user_id
+                )
+
             trans.commit()
         except:
             trans.rollback()
