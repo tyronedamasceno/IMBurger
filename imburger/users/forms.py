@@ -49,7 +49,6 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[
-        DataRequired(message="Campo obrigatorio"), Email()])
-    password = PasswordField('Password', validators=[DataRequired(message="Campo obrigatorio")])
-    remember = BooleanField('Lembre-me')
-    submit = SubmitField('Login')
+        DataRequired(message="Campo obrigatorio"), Email(message="endereço de email invalido")])
+    password = PasswordField('Senha', validators=[DataRequired(message="Campo obrigatorio")])
+    submit = SubmitField('Entrar')
