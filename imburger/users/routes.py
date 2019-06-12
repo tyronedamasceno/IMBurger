@@ -22,9 +22,6 @@ def register():
     form = forms.RegistrationForm()
 
     if form.validate_on_submit():
-        print ("==============TESTING BEGING ==============")
-        print (form.user_type.data)
-        print ("==============TESTING ENDING ==============")
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
 
@@ -43,8 +40,44 @@ def register():
         registration_number=form.registration_number.data
         user_type=form.user_type.data # 1 = Cliente / 2 = Funcionario / 3 = Administrador
 
-        # db.session.add(user)
-        db.session.commit()
+        conn = db.engine.connect()
+        trans = conn.begin()
+        try:
+            insert_user_sql = (
+                'INSERT INTO user (username, given_name, surname, email, password, image_file)'
+                ' VALUES (:username, :given_name, :surname, :email, :password, :image_file)'
+            )
+            conn.execute(
+                insert_user_sql,
+                username=username, given_name=given_name, surname=surname,
+                email=email, password=hashed_password, image_file='default.jpg'
+            )
+            user_id = conn.execute('SELECT * FROM user').lastrowid
+
+            if int(user_type) == 1:
+                insert_address_sql = (
+                    'INSERT INTO address (street, number, zipcode, neighborhood, city)'
+                    ' VALUES (:street, :number, :zipcode, :neighborhood, :city)'
+                )
+                conn.execute(
+                    insert_address_sql,
+                    street=street, number=number, zipcode=zipcode,
+                    neighborhood=neighborhood, city=city
+                )
+                address_id = conn.execute('SELECT * FROM address').lastrowid
+
+                insert_customer_sql = (
+                    'INSERT INTO customer (promo_points, user_id, address_id)'
+                    ' VALUES (:promo_points, :user_id, :address_id)'
+                )
+                conn.execute(
+                    insert_customer_sql,
+                    promo_points=0, user_id=user_id, address_id=address_id
+                )
+            trans.commit()
+        except:
+            trans.rollback()
+
         flash('Your account has been successfully created!', 'success')
         return redirect(url_for('main.home'))
     return render_template('register.html', title='Register', form=form)
