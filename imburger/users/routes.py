@@ -102,31 +102,35 @@ def login():
 
     form = forms.LoginForm()
     if form.validate_on_submit():
-
-        # Dados para logar
-
         email = form.email.data 
         password = form.password.data
 
-        # Consultar o usuario que tem o email passado no login (caso exista) \/
-        user = User.query.filter_by(email=form.email.data).first()
+        conn = db.engine.connect()
+        select_user_sql = (
+            'SELECT * FROM user WHERE email=:email'
+        )
+        result = conn.execute(
+            select_user_sql,
+            email=email
+        )
+        user = result.fetchone()
 
-        # Verificar se o usuario existem e se a senha passada no formulario bate com a senha criptografada
         if user and bcrypt.check_password_hash(
-            user.password, form.password.data
+            user['password'], form.password.data
         ):
-            # Caso sim, logar o usuario. Aqui eu acho que o User precisa ser um objeto para logar, além de servir para usar o as funcionalidades "current_user", então se precisar crie um objeto usando as variaveis que a gente já tem só pra poder usar nessa parte
-            login_user(user, remember=form.remember.data)
+            obj_user = User.query.get(user['id'])
+            login_user(obj_user, remember=True)
+
             next_page = request.args.get('next')
             flash(f'Você logou com sucesso!', 'success')
             return (
                 redirect(next_page) if next_page
-                else redirect(url_for('main.index'))
+                else redirect(url_for('main.home'))
             )
         else:
             # Caso não, login mal sucedido
             flash(
-                'Login  malsucedido. Verifique seu email e senha',
+                'Login  mal sucedido. Verifique seu email e senha',
                 'danger'
             )
     return render_template('login.html', title='login', form=form)
