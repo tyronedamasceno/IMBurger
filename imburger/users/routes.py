@@ -9,8 +9,8 @@ from imburger import db, bcrypt
 from imburger.models import User, Employee, Customer
 from imburger.users import forms
 
-
 users = Blueprint('users', __name__)
+
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
@@ -135,4 +135,12 @@ def login():
             )
     return render_template('login.html', title='login', form=form)
 
-            
+
+@users.route("/logout")
+def logout():
+    if current_user.is_authenticated:
+        logout_user()
+        flash('Logout com sucesso!', 'success')
+    else:
+        flash('Não há usuários logados!', 'warning')
+    return redirect(url_for('main.home'))
