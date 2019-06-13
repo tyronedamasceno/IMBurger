@@ -20,6 +20,11 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 
+@login_manager.user_loader
+def load_user(user_id):
+    from imburger.models import User
+    return User.query.get(user_id)
+
 mail = Mail(app)
 
 from imburger.users.routes import users as users_bp

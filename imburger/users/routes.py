@@ -98,7 +98,7 @@ def register():
 def login():
     if current_user.is_authenticated:
         flash('Você já está logado!', 'warning')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
 
     form = forms.LoginForm()
     if form.validate_on_submit():
