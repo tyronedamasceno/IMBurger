@@ -52,3 +52,27 @@ class LoginForm(FlaskForm):
         DataRequired(message="Campo obrigatorio"), Email(message="endereço de email invalido")])
     password = PasswordField('Senha', validators=[DataRequired(message="Campo obrigatorio")])
     submit = SubmitField('Entrar')
+
+class UpdateAccountForm(FlaskForm):
+    username = StringField('Username', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=2, max=20, message="Seu username precisa ter entre 2 e 20 caracteres")])
+    given_name = StringField('Nome', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=2, max=20, message="Seu nome precisa ter entre 2 e 20 caracteres")])
+    surname = StringField('Sobrenome', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=2, max=20, message="Seu sobrenome precisa ter entre 2 e 20 caracteres")])
+    email = StringField('Email', validators=[
+        DataRequired(message="Campo obrigatorio"), Email(message="email invalido")])
+    picture = FileField('Atualizar foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Atualizar conta')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('Esta username já está em uso. Escolha uma diferente.')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('Este email já está em uso. Escolha um diferente.')
