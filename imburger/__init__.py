@@ -11,8 +11,8 @@ app.config.from_object(Config)
 
 db = SQLAlchemy(app)
 from imburger import models
-# db.drop_all()
-# db.create_all()
+db.drop_all()
+db.create_all()
 
 bcrypt = Bcrypt(app)
 

@@ -120,9 +120,44 @@ def login():
         ):
             obj_user = User.query.get(user['id'])
 
-            # É necessário que a gente saiba se o usuario que acabou de logar é um cliente, funcionario ou administrador para prosseguir com o projeto. Acredito que é possível por meio de consultas nas tabelas de funcionario e cliente usando o id do user. Caso consiga descobrir, armazene essa informação na variável abaixo pois ela será usada em muitas partes no front-end
+            # Com o usuário já logaod, precisamos saber se o usuário é cliente, funcionario ou administrador
 
-            session['tipo_usuario'] = 1 # 1 caso seja cliente, 2 caso seja funcionario, 3 caso seja administrador
+            user_id = user['id']
+
+            # Minha ideia é: primeiro fazer uma pesquisa na tabela de clientes para ver se encontramos o id do usuario logado lá.
+
+            select_customer_sql = (
+            'SELECT * FROM customer WHERE user_id=:user_id'
+            )
+            result = conn.execute(
+                select_customer_sql,
+                user_id=user_id
+            )
+
+            user = result.fetchone()
+
+            if user:
+                # Caso o id do usuario seja encontrado na tabela de clientes, o usuario é cliente e colocamos a variavel na sessão
+                session['tipo_usuario'] = 1
+            else:
+                # Caso não, sabemos que o usuario é um funcionario e está na tabela de funcionários, basta saber se é administrador ou nao
+
+                select_employee_sql = (
+                'SELECT * FROM employee WHERE user_id=:user_id'
+                )
+                
+                result = conn.execute(
+                select_employee_sql,
+                user_id=user_id
+                )
+
+                user = result.fetchone()
+                if user['admin']:
+                    # Caso o empregado retornado seja administrador, colocamos isso na variavel de sessão
+                    session['tipo_usuario'] = 3
+                else:
+                    # Caso o empregado seja apenas um funcionario normal, colocamos isso na variavel de sessão
+                    session['tipo_usuario'] = 2
 
 
             login_user(obj_user, remember=True)
@@ -145,6 +180,7 @@ def login():
 @users.route("/logout")
 def logout():
     if current_user.is_authenticated:
+        session['tipo_usuario'] = 0
         logout_user()
         flash('Logout com sucesso!', 'success')
     else:
