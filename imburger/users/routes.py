@@ -9,6 +9,8 @@ from imburger import db, bcrypt
 from imburger.models import User, Employee, Customer
 from imburger.users import forms
 
+from imburger.users.utils import save_picture
+
 users = Blueprint('users', __name__)
 
 
@@ -138,7 +140,7 @@ def login():
 
             if user:
                 # Caso o id do usuario seja encontrado na tabela de clientes, o usuario é cliente e colocamos a variavel na sessão
-                session['tipo_usuario'] = 1
+                session['user_type'] = 1
             else:
                 # Caso não, sabemos que o usuario é um funcionario e está na tabela de funcionários, basta saber se é administrador ou nao
 
@@ -154,10 +156,10 @@ def login():
                 user = result.fetchone()
                 if user['admin']:
                     # Caso o empregado retornado seja administrador, colocamos isso na variavel de sessão
-                    session['tipo_usuario'] = 3
+                    session['user_type'] = 3
                 else:
                     # Caso o empregado seja apenas um funcionario normal, colocamos isso na variavel de sessão
-                    session['tipo_usuario'] = 2
+                    session['user_type'] = 2
 
 
             login_user(obj_user, remember=True)
@@ -180,7 +182,7 @@ def login():
 @users.route("/logout")
 def logout():
     if current_user.is_authenticated:
-        session['tipo_usuario'] = 0
+        session['user_type'] = 0
         logout_user()
         flash('Logout com sucesso!', 'success')
     else:
@@ -192,15 +194,41 @@ def logout():
 def my_profile():
     form = forms.UpdateAccountForm()
     if form.validate_on_submit():
+
+        # Dados para alterar meu perfil \/
+
+        user_id = current_user.id
+        image_file = current_user.image_file
+        given_name = form.given_name.data
+        surname = form.surname.data
+        username = form.username.data
+        email = form.email.data
+
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        db.session.commit()
+            image_file= save_picture(form.picture.data)
+
+        conn = db.engine.connect()
+        trans = conn.begin()
+
+        try:
+            update_user_sql = (
+                'UPDATE user SET given_name = :given_name, surname = :surname, username = :username, email = :email, image_file = :image_file WHERE id = :user_id'
+            )
+            conn.execute(
+                update_user_sql,
+                given_name=given_name, surname=surname, username=username, 
+                email=email, image_file=image_file, user_id=user_id
+            )
+            
+            trans.commit()
+        except:
+            trans.rollback()
+
         flash('Sua conta foi atualizada com sucesso', 'success')
         return redirect(url_for('users.my_profile'))
     elif request.method == 'GET':
+        form.given_name.data = current_user.given_name
+        form.surname.data = current_user.surname
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)

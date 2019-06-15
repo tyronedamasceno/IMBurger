@@ -52,14 +52,14 @@
             </a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ url_for('users.my_profile') }}">Meu Perfil</a>
-              {% if session['tipo_usuario'] == 1 %}
+              {% if session['user_type'] == 1 %}
               <a class="dropdown-item" href="#">Meus Pedidos</a>
               {% endif %}
-              {% if session['tipo_usuario'] == 2 %}
+              {% if session['user_type'] == 2 %}
               <a class="dropdown-item" href="#">Gerenciar Pedidos</a>
               <a class="dropdown-item" href="#">Gerenciar Produtos</a>
               {% endif %}
-              {% if session['tipo_usuario'] == 3 %}
+              {% if session['user_type'] == 3 %}
               <a class="dropdown-item" href="#">Gerenciar Estoque</a>
               {% endif %}
               <a class="dropdown-item" href="{{ url_for('users.logout') }}">Sair</a>

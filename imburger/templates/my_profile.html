@@ -1,58 +1,104 @@
 {% extends "layout.html" %} {% block content %}
 
-<div class="container">
-  <div id="profilePanel" class="mt-5">
-    <div class="row">
-      <div class="col-md-12 col-lg-4 mb-3">
-        <div id="picturePanel">
-          <div class="text-center">
-            <h1 style="font-size: 22px;"> Usuario123 </h1>
-            <span class="badge badge-pill badge-info">Cliente</span>
-          </div>
-          <div class="text-center mt-2">
-            <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="rounded-circle" alt="avatar">
-            <h6>Mude sua foto...</h6>
-            <input type="file" class="text-center center-block file-upload">
+<form method="POST" action="" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <div class="container">
+    <div id="profilePanel" class="mt-5">
+      <div class="row">
+        <div class="col-md-12 col-lg-4 mb-3">
+          <div id="picturePanel">
+            <div class="text-center">
+              <h1 style="font-size: 22px;"> {{ current_user.username}}</h1>
+              <span class="badge badge-pill badge-info">
+                {% if session['user_type'] == 1 %}
+                Cliente
+                {% elif session['user_type'] == 2 %}
+                Funcionario
+                {% else %}
+                Administrador
+                {% endif %}
+              </span>
+            </div>
+            <div class="text-center mt-2">
+              <img class="rounded-circle account-img" src="{{ image_file }}">
+              {{ form.picture(class="form-control-file") }}
+              {{ form.picture.label() }}
+            </div>
+            {% if form.picture.errors %}
+            {% for error in form.picture.errors %}
+            <span class="text-danger">{{ error }}</span></br>
+            {% endfor %}
+            {% endif %}
           </div>
         </div>
-      </div>
-      <div class="col-md-12 col-lg-8">
-        <form>
-          <div class="form-group">
+        <div class="col-md-12 col-lg-8">
 
-            <label for="name" class="font-weight-bold">Nome</label>
-            <input type="text" id="name" class="form-control" name="name" placeholder="Digite seu nome" required
-              autofocus>
+          <div class="form-group">
+            {{ form.given_name.label(class="font-weight-bold") }}
+
+            {% if form.given_name.errors %}
+            {{ form.given_name(class="form-control is-invalid") }}
+            <div class="invalid-input-feedback">
+              {% for error in form.given_name.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form.given_name(class="form-control") }}
+            {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="name" class="font-weight-bold">Sobrenome</label>
-            <input type="text" id="name" class="form-control" name="name" placeholder="Digite seu sobrenome" required
-              autofocus>
-          </div>
+            {{ form.surname.label(class="font-weight-bold") }}
 
+            {% if form.surname.errors %}
+            {{ form.surname(class="form-control is-invalid") }}
+            <div class="invalid-input-feedback">
+              {% for error in form.surname.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form.surname(class="form-control") }}
+            {% endif %}
+          </div>
 
           <div class="form-group">
-            <label class="font-weight-bold"> Username</label>
-            <input type="text" id="username" class="form-control" name="username" placeholder="Digite seu username"
-              required autofocus>
-          </div>
+            {{ form.username.label(class="font-weight-bold") }}
 
+            {% if form.username.errors %}
+            {{ form.username(class="form-control is-invalid") }}
+            <div class="invalid-input-feedback">
+              {% for error in form.username.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form.username(class="form-control") }}
+            {% endif %}
+          </div>
 
           <div class="form-group">
-            <label for="password" class="font-weight-bold">Email:</label>
-            <input type="password" id="password" class="form-control" name="password" placeholder="Digite seu email"
-              required>
+            {{ form.email.label(class="font-weight-bold") }}
+
+            {% if form.email.errors %}
+            {{ form.email(class="form-control is-invalid") }}
+            <div class="invalid-input-feedback">
+              {% for error in form.email.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form.email(class="form-control") }}
+            {% endif %}
           </div>
 
-          <button type="submit" class="btn btn-success mb-2"><i class="fas fa-save mr-2"></i>Salvar alterçaões</button>
-          <button type="button" class="btn btn-primary mb-2"><i class="fas fa-backspace mr-2"></i>Cancelar</button>
-
-        </form>
+          <button type="submit" class="btn btn-success mb-2"><i class="fas fa-save mr-2"></i>Salvar alterações</button>
+          <a href="{{url_for('main.home')}}" class="btn btn-primary mb-2">Cancelar</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
+</form>
 
 {% endblock content %}
