@@ -13,13 +13,27 @@ from imburger.users.utils import save_picture
 
 users = Blueprint('users', __name__)
 
+@users.route("/")
+@users.route("/home")
+def home():
+    if session['user_type'] == 2:
+        return redirect(url_for('users.order_management'))
+    elif session['user_type'] == 3:
+        return redirect(url_for('users.stock_management'))
+
+    return render_template('home.html', home_page=True, title='Inicio')
+
+
+@users.route("/about")
+def about():
+    return render_template('about.html', about_page=True, title='Quem Somos')
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
 
     if current_user.is_authenticated:
         flash('Você já está logado!', 'warning')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('users.home'))
 
     form = forms.RegistrationForm()
 
@@ -100,7 +114,7 @@ def register():
 def login():
     if current_user.is_authenticated:
         flash('Você já está logado!', 'warning')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('users.home'))
 
     form = forms.LoginForm()
     if form.validate_on_submit():
@@ -168,7 +182,7 @@ def login():
             flash(f'Você logou com sucesso!', 'success')
             return (
                 redirect(next_page) if next_page
-                else redirect(url_for('main.home')) if session['user_type'] == 1
+                else redirect(url_for('users.home')) if session['user_type'] == 1
                 else redirect(url_for('users.order_management')) if session['user_type'] == 2
                 else redirect(url_for('users.stock_management')) 
             )
@@ -189,7 +203,7 @@ def logout():
         flash('Logout com sucesso!', 'success')
     else:
         flash('Não há usuários logados!', 'warning')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('users.home'))
 
 @users.route("/my_profile", methods=['GET', 'POST'])
 @login_required
@@ -241,9 +255,19 @@ def my_profile():
 @users.route("/order_management")
 @login_required
 def order_management():
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
     return render_template('order_management.html')
 
 @users.route("/stock_management")
 @login_required
 def stock_management():
+    if session['user_type'] != 3:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.order_management'))
     return render_template('stock_management.html')

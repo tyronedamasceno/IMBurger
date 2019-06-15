@@ -28,9 +28,7 @@ def load_user(user_id):
 mail = Mail(app)
 
 from imburger.users.routes import users as users_bp
-from imburger.main.routes import main as main_bp
 from imburger.errors.handlers import errors as errors_bp
 
 app.register_blueprint(users_bp)
 app.register_blueprint(errors_bp)
-app.register_blueprint(main_bp)
