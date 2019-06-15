@@ -187,10 +187,9 @@ def logout():
         flash('Não há usuários logados!', 'warning')
     return redirect(url_for('main.home'))
 
-
-@users.route("/my-profile", methods=['GET', 'POST'])
+@users.route("/my_profile", methods=['GET', 'POST'])
 @login_required
-def account():
+def my_profile():
     form = forms.UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -200,10 +199,10 @@ def account():
         current_user.email = form.email.data
         db.session.commit()
         flash('Sua conta foi atualizada com sucesso', 'success')
-        return redirect(url_for('users.account'))
+        return redirect(url_for('users.my_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account',
+    return render_template('my_profile.html', title='Account',
                            image_file=image_file, form=form)
