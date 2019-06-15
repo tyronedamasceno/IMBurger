@@ -122,7 +122,7 @@ def login():
         ):
             obj_user = User.query.get(user['id'])
 
-            # Com o usuário já logaod, precisamos saber se o usuário é cliente, funcionario ou administrador
+            # Com o usuário já logado, precisamos saber se o usuário é cliente, funcionario ou administrador
 
             user_id = user['id']
 
@@ -168,7 +168,9 @@ def login():
             flash(f'Você logou com sucesso!', 'success')
             return (
                 redirect(next_page) if next_page
-                else redirect(url_for('main.home'))
+                else redirect(url_for('main.home')) if session['user_type'] == 1
+                else redirect(url_for('users.order_management')) if session['user_type'] == 2
+                else redirect(url_for('users.stock_management')) 
             )
         else:
             # Caso não, login mal sucedido
@@ -219,7 +221,7 @@ def my_profile():
                 given_name=given_name, surname=surname, username=username, 
                 email=email, image_file=image_file, user_id=user_id
             )
-            
+
             trans.commit()
         except:
             trans.rollback()
@@ -234,3 +236,14 @@ def my_profile():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('my_profile.html', title='Account',
                            image_file=image_file, form=form)
+
+
+@users.route("/order_management")
+@login_required
+def order_management():
+    return render_template('order_management.html')
+
+@users.route("/stock_management")
+@login_required
+def stock_management():
+    return render_template('stock_management.html')
