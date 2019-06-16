@@ -309,6 +309,52 @@ def add_product():
     
     return render_template('add_product.html', form=form)
 
+@users.route("/stock_management/<int:product_id>", methods=['GET', 'POST'])
+@login_required
+def edit_product(product_id):
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+    
+
+    conn = db.engine.connect()
+
+    select_product_item_sql = (
+        'SELECT * FROM product WHERE id = :product_id'
+    )
+    result = conn.execute(
+        select_product_item_sql,
+        product_id=product_id
+    )
+
+    product_item = result.fetchone()
+
+    form = forms.AddProductForm()
+
+    if form.validate_on_submit():
+
+        name = form.name.data
+        price = form.price.data 
+        description = form.description.data
+
+        update_product_sql = (
+            'UPDATE product SET name=:name, price=:price, description=:description WHERE id = :product_id'
+        )
+        conn.execute(
+            update_product_sql,
+            name=name, price=price, description=description,
+            product_id=product_id
+        )
+            
+        return redirect(url_for('users.product_management'))
+    elif request.method == 'GET':
+        form.name.data = product_item['name']
+        form.price.data = product_item['price']
+        form.description.data = product_item['description']
+    return render_template('product_management_edit.html', form=form, product_item=product_item)
+
 @users.route("/product_management/<int:product_id>/delete", methods=['POST'])
 @login_required
 def delete_product(product_id):
