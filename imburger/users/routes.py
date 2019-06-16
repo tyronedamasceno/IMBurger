@@ -270,4 +270,65 @@ def stock_management():
             return redirect(url_for('users.home'))
         else:
             return redirect(url_for('users.order_management'))
-    return render_template('stock_management.html')
+    
+    conn = db.engine.connect()
+
+    select_stock_items_sql = (
+        'SELECT ingredient.name, stock.id, stock.quantity, ingredient.unit_measuring FROM ingredient JOIN stock ON ingredient.id = stock.ingredient_id'
+    )
+    result = conn.execute(
+        select_stock_items_sql
+    )
+
+    return render_template('stock_management.html', stock_items = result)
+
+@users.route("/stock_management/<int:stock_id>", methods=['GET', 'POST'])
+@login_required
+def edit_stock(stock_id):
+    if session['user_type'] != 3:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.order_management'))
+    
+
+    conn = db.engine.connect()
+
+    select_stock_item_sql = (
+        'SELECT ingredient.id AS ingredient_id, ingredient.name, stock.id AS stock_id, stock.quantity, ingredient.unit_measuring FROM ingredient JOIN stock ON ingredient.id = stock.ingredient_id WHERE stock.id = :stock_id'
+    )
+    result = conn.execute(
+        select_stock_item_sql,
+        stock_id = stock_id
+    )
+
+    stock_item = result.fetchone()
+
+    form = forms.EditStockForm()
+
+    if form.validate_on_submit():
+
+        quantity = form.quantity.data
+        name = form.name.data
+
+        update_stock_sql = (
+            'UPDATE stock SET quantity = :quantity WHERE id = :stock_id'
+        )
+        conn.execute(
+            update_stock_sql,
+            quantity=quantity, stock_id=stock_id
+        )
+
+        update_stock_sql = (
+            'UPDATE ingredient SET name = :name WHERE id = :ingredient_id'
+        )
+        conn.execute(
+            update_stock_sql,
+            name=name, ingredient_id=stock_item['ingredient_id']
+        )
+            
+        return redirect(url_for('users.stock_management'))
+    elif request.method == 'GET':
+        form.name.data = stock_item['name']
+        form.quantity.data = stock_item['quantity']
+    return render_template('stock_management_edit.html', form=form, stock_item=stock_item)

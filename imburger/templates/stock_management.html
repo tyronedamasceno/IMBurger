@@ -13,46 +13,21 @@
           <thead>
             <tr>
               <th scope="col" style="">Ingrediente</th>
-              <th scope="col" style="">Quantidade (em gramas)</th>
+              <th scope="col" style="">Quantidade</th>
               <th scope="col" style="width: 10%;" class="text-center">Ação</th>
             </tr>
           </thead>
           <tbody>
+            {% for stock_item in stock_items %}
             <tr>
-              <td>Pão</td>
-              <td>1400</td>
+              <td>{{ stock_item['name'] }}</td>
+              <td>{{ stock_item['quantity'] }}</td>
               <td>
-                <button type="button" class="btn btn-primary btn-block font-weight-bold">Editar</button>
+                <a href="{{ url_for('users.edit_stock', stock_id=stock_item['id']) }}"
+                  class="btn btn-primary btn-block font-weight-bold">Editar</a>
               </td>
             </tr>
-            <tr>
-              <td>Carne Bovina</td>
-              <td>3400</td>
-              <td>
-                <button type="button" class="btn btn-primary btn-block font-weight-bold">Editar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Salada</td>
-              <td>800</td>
-              <td>
-                <button type="button" class="btn btn-primary btn-block font-weight-bold">Editar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Queijo Cheddar</td>
-              <td>4000</td>
-              <td>
-                <button type="button" class="btn btn-primary btn-block font-weight-bold">Editar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Queijo Suiço</td>
-              <td>2700</td>
-              <td>
-                <button type="button" class="btn btn-primary btn-block font-weight-bold">Editar</button>
-              </td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>

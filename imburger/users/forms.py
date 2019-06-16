@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, FloatField
 from wtforms.validators import (
-    DataRequired, Length, Email, EqualTo, ValidationError
+    DataRequired, InputRequired, Length, Email, EqualTo, ValidationError, NumberRange
 )
 from flask_login import current_user
 
@@ -76,3 +76,11 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('Este email já está em uso. Escolha um diferente.')
+
+
+class EditStockForm(FlaskForm):
+    name = StringField('Nome', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=2, max=50, message="O nome do ingrediente deve ter entre 2 e 50 caracteres")])
+    quantity = FloatField('Quantidade', validators=[
+        InputRequired(message="Campo obrigatorio"), NumberRange(min=0.0, message="A quantidade não pode ser negativa")])
+    submit = SubmitField('Editar Estoque')
