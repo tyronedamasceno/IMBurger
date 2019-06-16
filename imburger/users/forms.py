@@ -63,7 +63,6 @@ class UpdateAccountForm(FlaskForm):
     email = StringField('Email', validators=[
         DataRequired(message="Campo obrigatorio"), Email(message="email invalido")])
     picture = FileField('Atualizar foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('teste')
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -83,4 +82,13 @@ class EditStockForm(FlaskForm):
         DataRequired(message="Campo obrigatorio"), Length(min=2, max=50, message="O nome do ingrediente deve ter entre 2 e 50 caracteres")])
     quantity = FloatField('Quantidade', validators=[
         InputRequired(message="Campo obrigatorio"), NumberRange(min=0.0, message="A quantidade não pode ser negativa")])
-    submit = SubmitField('Editar Estoque')
+    unit_measuring = StringField('Unidade de medida', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=1, max=2, message="A unidade de medida deve ter de 1 a 2 caracteres")])
+
+class AddIngredientForm(FlaskForm):
+    name = StringField('Nome', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=2, max=50, message="O nome do ingrediente deve ter entre 2 e 50 caracteres")])
+    initial_quantity = FloatField('Quantidade', validators=[
+        InputRequired(message="Campo obrigatorio"), NumberRange(min=0.0, message="A quantidade não pode ser negativa")])
+    unit_measuring = StringField('Unidade de medida', validators=[
+        DataRequired(message="Campo obrigatorio"), Length(min=1, max=2, message="A unidade de medida deve ter de 1 a 2 caracteres")])

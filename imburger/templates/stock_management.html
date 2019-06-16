@@ -3,8 +3,8 @@
 <div class="container mt-3">
   <div id="estoque-wrapper">
     <div class="text-center">
-      <button type="button" class="btn btn-dark btn-lg btn-block">
-        <i class="fas fa-plus mr-2"></i>Adicionar novo ingrediente</button>
+      <a href="{{ url_for('users.add_ingredient') }}" class="btn btn-dark btn-lg btn-block"><i
+          class="fas fa-plus mr-2"></i>Adicionar novo ingrediente</a>
     </div>
 
     <div class="row mt-3">
@@ -18,16 +18,23 @@
             </tr>
           </thead>
           <tbody>
+            {% if not stock_items %}
+            <tr>
+              <td colspan="3">Não há itens no estoque</td>
+            </tr>
+            {% else %}
             {% for stock_item in stock_items %}
             <tr>
               <td>{{ stock_item['name'] }}</td>
-              <td>{{ stock_item['quantity'] }}</td>
+              <td>{{ stock_item['quantity'] }} {{ stock_item['unit_measuring'] }}</td>
               <td>
                 <a href="{{ url_for('users.edit_stock', stock_id=stock_item['id']) }}"
                   class="btn btn-primary btn-block font-weight-bold">Editar</a>
               </td>
             </tr>
             {% endfor %}
+            {% endif %}
+
           </tbody>
         </table>
       </div>

@@ -310,6 +310,7 @@ def edit_stock(stock_id):
 
         quantity = form.quantity.data
         name = form.name.data
+        unit_measuring = form.unit_measuring.data
 
         update_stock_sql = (
             'UPDATE stock SET quantity = :quantity WHERE id = :stock_id'
@@ -320,15 +321,65 @@ def edit_stock(stock_id):
         )
 
         update_stock_sql = (
-            'UPDATE ingredient SET name = :name WHERE id = :ingredient_id'
+            'UPDATE ingredient SET name = :name, unit_measuring = :unit_measuring WHERE id = :ingredient_id'
         )
         conn.execute(
             update_stock_sql,
-            name=name, ingredient_id=stock_item['ingredient_id']
+            name=name, unit_measuring=unit_measuring, 
+            ingredient_id=stock_item['ingredient_id']
         )
             
         return redirect(url_for('users.stock_management'))
     elif request.method == 'GET':
         form.name.data = stock_item['name']
         form.quantity.data = stock_item['quantity']
+        form.unit_measuring.data = stock_item['unit_measuring']
     return render_template('stock_management_edit.html', form=form, stock_item=stock_item)
+
+
+@users.route("/stock_management/add", methods=['GET', 'POST'])
+@login_required
+def add_ingredient():
+    if session['user_type'] != 3:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.order_management'))
+
+    form = forms.AddIngredientForm()
+
+    if form.validate_on_submit():
+        # Dados para inserção do novo ingrediente e do novo estoque \/
+        name = form.name.data
+        unit_measuring = form.unit_measuring.data
+        initial_quantity = form.initial_quantity.data
+
+        conn = db.engine.connect()
+        trans = conn.begin()
+
+        try:
+            insert_ingredient_sql = (
+                'INSERT INTO ingredient (name, unit_measuring)'
+                ' VALUES (:name, :unit_measuring)'
+            )
+            conn.execute(
+                insert_ingredient_sql,
+                name=name, unit_measuring=unit_measuring
+            )
+
+            ingredient_id = conn.execute('SELECT * FROM ingredient').lastrowid
+
+            insert_stock_sql = (
+                'INSERT INTO stock (quantity, ingredient_id)'
+                ' VALUES (:quantity, :ingredient_id)'
+            )
+            conn.execute(
+                insert_stock_sql,
+                quantity=initial_quantity, ingredient_id=ingredient_id
+            )
+
+            trans.commit()
+        except:
+            trans.rollback()
+        return redirect(url_for('users.stock_management'))
+    return render_template('add_ingredient.html', form=form)
