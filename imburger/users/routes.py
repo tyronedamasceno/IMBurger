@@ -443,16 +443,41 @@ def add_product_ingredient(product_id):
         ingredient_id=form.ingredient_id.data 
         quantity=form.quantity.data
 
-        insert_product_ingredient_sql = (
-        'INSERT INTO products_ingredients (product_id, ingredient_id, quantity)'
-        ' VALUES (:product_id, :ingredient_id, :quantity)'
+        # Veficiar se já existe uma linha na tabela com o produto-ingrediente:
+
+        search_product_ingredient_sql = (
+        'SELECT * FROM products_ingredients WHERE product_id = :product_id AND ingredient_id = :ingredient_id'
         )
         result = conn.execute(
-            insert_product_ingredient_sql,
+            search_product_ingredient_sql,
             product_id=product_id, ingredient_id=ingredient_id,
-            quantity=quantity
         )
-        return redirect(url_for('users.product_management'))
+
+        product_ingredient = result.fetchone()
+
+        # Caso já exista, atualizar a linha
+        if product_ingredient:
+            update_product_ingredient_sql = (
+            'UPDATE products_ingredients SET quantity = quantity + :quantity WHERE product_id=:product_id AND ingredient_id=:ingredient_id'
+            )
+            result = conn.execute(
+                update_product_ingredient_sql,
+                product_id=product_id, ingredient_id=ingredient_id,
+                quantity=quantity
+            )
+            return redirect(url_for('users.product_management'))
+        else:
+            insert_product_ingredient_sql = (
+            'INSERT INTO products_ingredients (product_id, ingredient_id, quantity)'
+            ' VALUES (:product_id, :ingredient_id, :quantity)'
+            )
+            result = conn.execute(
+                insert_product_ingredient_sql,
+                product_id=product_id, ingredient_id=ingredient_id,
+                quantity=quantity
+            )
+            return redirect(url_for('users.product_management'))
+
 
     return render_template('add_product_ingredient.html', product_ingredients=product_ingredients, ingredient_items=ingredient_items, product_name=product_name, form=form)
 
