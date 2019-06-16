@@ -100,3 +100,8 @@ class AddProductForm(FlaskForm):
         DataRequired(message="Campo obrigatorio"), Length(min=3, max=100, message="A descrição deve conter entre 3 a 100 caracteres")])
     price = FloatField('Preço (em reais)', validators=[
         InputRequired(message="Campo obrigatorio"), NumberRange(min=0.0, message="O preço não pode ser negativo")])
+
+class AddProductIngredientForm(FlaskForm):
+    ingredient_id = SelectField('Novo ingrediente', coerce=int, choices=[])
+    quantity = FloatField('Quantidade', validators=[
+        InputRequired(message="Campo obrigatorio"), NumberRange(min=0.0, message="A quantidade não pode ser negativa")])

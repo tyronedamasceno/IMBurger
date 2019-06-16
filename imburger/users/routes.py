@@ -391,6 +391,70 @@ def delete_product(product_id):
 
     return redirect(url_for('users.product_management'))
 
+@users.route("/product_management/add_ingredient/<int:product_id>", methods=['GET', 'POST'])
+@login_required
+def add_product_ingredient(product_id):
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+    conn = db.engine.connect()
+
+    select_product_name_sql = (
+        'SELECT name FROM product WHERE product.id=:product_id'
+    )
+    result = conn.execute(
+        select_product_name_sql,
+        product_id=product_id
+    )
+
+    product_name = result.fetchone()['name']
+
+    select_product_ingredients_sql = (
+        'SELECT ingredient.name,products_ingredients.quantity, ingredient.unit_measuring FROM products_ingredients INNER JOIN ingredient ON products_ingredients.ingredient_id=ingredient.id WHERE products_ingredients.product_id=:product_id;'
+    )
+    result = conn.execute(
+        select_product_ingredients_sql,
+        product_id=product_id
+    )
+
+    product_ingredients = result
+
+    select_ingredients_sql = (
+        'SELECT * from ingredient'
+    )
+    result = conn.execute(
+        select_ingredients_sql
+    )
+
+    ingredient_items = result
+
+    form = forms.AddProductIngredientForm()
+
+    form.ingredient_id.choices = []       
+
+    for ingredient_item in ingredient_items:
+        form.ingredient_id.choices += [(ingredient_item['id'], ingredient_item['name'])]
+
+    if form.validate_on_submit():
+        product_id=product_id
+        ingredient_id=form.ingredient_id.data 
+        quantity=form.quantity.data
+
+        insert_product_ingredient_sql = (
+        'INSERT INTO products_ingredients (product_id, ingredient_id, quantity)'
+        ' VALUES (:product_id, :ingredient_id, :quantity)'
+        )
+        result = conn.execute(
+            insert_product_ingredient_sql,
+            product_id=product_id, ingredient_id=ingredient_id,
+            quantity=quantity
+        )
+        return redirect(url_for('users.product_management'))
+
+    return render_template('add_product_ingredient.html', product_ingredients=product_ingredients, ingredient_items=ingredient_items, product_name=product_name, form=form)
 
 @users.route("/order_management")
 @login_required
