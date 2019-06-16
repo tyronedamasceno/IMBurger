@@ -13,8 +13,9 @@
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" style="width: 50%;">Ingrediente</th>
-                <th scope="col" style="width: 50%;">Quantidade</th>
+                <th scope="col" style="width: 40%;">Ingrediente</th>
+                <th scope="col" style="width: 40%;">Quantidade</th>
+                <th scope="col" style="width: 20%;" class="text-center">Ação</th>
               </tr>
             </thead>
             <tbody>
@@ -22,6 +23,13 @@
               <tr>
                 <td>{{ product_ingredient['name'] }}</td>
                 <td> {{ product_ingredient['quantity'] }} {{ product_ingredient['unit_measuring'] }} </td>
+                <td class="text-center">
+                  <form
+                    action="{{ url_for('users.delete_product_ingredient', product_id=product_ingredient['product_id'], ingredient_id=product_ingredient['ingredient_id']) }}"
+                    method="POST" style="display: inline">
+                    <input class="btn btn-danger" type="submit" value="Remover">
+                  </form>
+                </td>
               </tr>
               {% endfor %}
             </tbody>
@@ -62,9 +70,9 @@
             </div>
             <div class="card-footer text-muted">
               <button type="submit" class="btn btn-success mb-2"><i class="fas fa-plus mr-2"></i>Adicionar
-                produto</button>
+                Ingrediente</button>
               <a href="{{url_for('users.product_management')}}" class="btn btn-primary mb-2"><i
-                  class="fas fa-backspace mr-2"></i>Cancelar</a>
+                  class="fas fa-arrow-left mr-2"></i>Voltar</a>
             </div>
           </form>
         </div>

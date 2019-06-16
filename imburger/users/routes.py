@@ -368,22 +368,6 @@ def delete_product(product_id):
     conn = db.engine.connect()
     trans = conn.begin()
 
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print(product_id)
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-    print("############")
-
     try:
         delete_product_ingredients_sql = (
             'DELETE FROM products_ingredients WHERE product_id = :product_id'
@@ -429,7 +413,7 @@ def add_product_ingredient(product_id):
     product = result.fetchone()
 
     select_product_ingredients_sql = (
-        'SELECT ingredient.name,products_ingredients.quantity, ingredient.unit_measuring FROM products_ingredients INNER JOIN ingredient ON products_ingredients.ingredient_id=ingredient.id WHERE products_ingredients.product_id=:product_id;'
+        'SELECT ingredient.name,products_ingredients.quantity,products_ingredients.product_id,products_ingredients.ingredient_id, ingredient.unit_measuring FROM products_ingredients INNER JOIN ingredient ON products_ingredients.ingredient_id=ingredient.id WHERE products_ingredients.product_id=:product_id;'
     )
     result = conn.execute(
         select_product_ingredients_sql,
@@ -481,7 +465,7 @@ def add_product_ingredient(product_id):
                 product_id=product_id, ingredient_id=ingredient_id,
                 quantity=quantity
             )
-            return redirect(url_for('users.product_management'))
+            return redirect(url_for('users.add_product_ingredient', product_id=product_id))
         else:
             insert_product_ingredient_sql = (
             'INSERT INTO products_ingredients (product_id, ingredient_id, quantity)'
@@ -492,10 +476,38 @@ def add_product_ingredient(product_id):
                 product_id=product_id, ingredient_id=ingredient_id,
                 quantity=quantity
             )
-            return redirect(url_for('users.product_management'))
+            return redirect(url_for('users.add_product_ingredient', product_id=product_id))
 
 
     return render_template('add_product_ingredient.html', product_ingredients=product_ingredients, ingredient_items=ingredient_items, product=product, form=form)
+
+@users.route("/product_management/product_ingredient/<int:product_id>/<int:ingredient_id>/delete", methods=['POST'])
+@login_required
+def delete_product_ingredient(product_id, ingredient_id):
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+    conn = db.engine.connect()
+    trans = conn.begin()
+
+    try:
+        delete_product_ingredient_sql = (
+            'DELETE FROM products_ingredients WHERE product_id = :product_id AND ingredient_id = :ingredient_id'
+        )
+        conn.execute(
+            delete_product_ingredient_sql,
+            product_id=product_id,
+            ingredient_id=ingredient_id
+        )
+
+        trans.commit()
+    except:
+        trans.rollback()
+
+    return redirect(url_for('users.add_product_ingredient', product_id=product_id))
 
 @users.route("/order_management")
 @login_required
