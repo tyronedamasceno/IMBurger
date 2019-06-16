@@ -233,6 +233,12 @@ products_ingredients = db.Table(
         db.Integer,
         db.ForeignKey('ingredient.id'),
         primary_key=True
+    ),
+    db.Column(
+        'quantity',
+        db.Float,
+        nullable=False,
+        default=1
     )
 )
 

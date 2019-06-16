@@ -252,6 +252,100 @@ def my_profile():
                            image_file=image_file, form=form)
 
 
+@users.route("/product_management")
+@login_required
+def product_management():
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+    conn = db.engine.connect()
+
+    select_products_sql = (
+        'SELECT * FROM product'
+    )
+    result = conn.execute(
+        select_products_sql
+    )
+
+    return render_template('product_management.html', product_items = result)
+
+@users.route("/product_management/add", methods=['GET', 'POST'])
+@login_required
+def add_product():
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+    form = forms.AddProductForm()
+
+    if form.validate_on_submit():
+        # Dados para inserção do novo ingrediente e do novo estoque \/
+        name = form.name.data
+        price = form.price.data
+        description = form.description.data
+
+        conn = db.engine.connect()
+        trans = conn.begin()
+
+        try:
+            insert_product_sql = (
+                'INSERT INTO product (name, price, description)'
+                ' VALUES (:name, :price, :description)'
+            )
+            conn.execute(
+                insert_product_sql,
+                name=name, price=price, description=description
+            )
+
+            trans.commit()
+        except:
+            trans.rollback()
+        return redirect(url_for('users.product_management'))
+    
+    return render_template('add_product.html', form=form)
+
+@users.route("/product_management/<int:product_id>/delete", methods=['POST'])
+@login_required
+def delete_product(product_id):
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+
+    conn = db.engine.connect()
+    trans = conn.begin()
+
+    try:
+        delete_product_ingredients_sql = (
+            'DELETE FROM products_ingredients WHERE product_id = :product_id'
+        )
+        conn.execute(
+            delete_product_ingredients_sql,
+            product_id=product_id
+        )
+
+        delete_product_sql = (
+            'DELETE FROM product WHERE id = :product_id'
+        )
+        conn.execute(
+            delete_product_sql,
+            product_id=product_id
+        )
+
+        trans.commit()
+    except:
+        trans.rollback()
+
+    return redirect(url_for('users.product_management'))
+
+
 @users.route("/order_management")
 @login_required
 def order_management():
