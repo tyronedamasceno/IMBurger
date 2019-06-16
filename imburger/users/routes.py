@@ -309,7 +309,7 @@ def add_product():
     
     return render_template('add_product.html', form=form)
 
-@users.route("/stock_management/<int:product_id>", methods=['GET', 'POST'])
+@users.route("/product_management/<int:product_id>", methods=['GET', 'POST'])
 @login_required
 def edit_product(product_id):
     if session['user_type'] != 2:
@@ -368,6 +368,22 @@ def delete_product(product_id):
     conn = db.engine.connect()
     trans = conn.begin()
 
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print(product_id)
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+    print("############")
+
     try:
         delete_product_ingredients_sql = (
             'DELETE FROM products_ingredients WHERE product_id = :product_id'
@@ -403,14 +419,14 @@ def add_product_ingredient(product_id):
     conn = db.engine.connect()
 
     select_product_name_sql = (
-        'SELECT name FROM product WHERE product.id=:product_id'
+        'SELECT id, name FROM product WHERE product.id=:product_id'
     )
     result = conn.execute(
         select_product_name_sql,
         product_id=product_id
     )
 
-    product_name = result.fetchone()['name']
+    product = result.fetchone()
 
     select_product_ingredients_sql = (
         'SELECT ingredient.name,products_ingredients.quantity, ingredient.unit_measuring FROM products_ingredients INNER JOIN ingredient ON products_ingredients.ingredient_id=ingredient.id WHERE products_ingredients.product_id=:product_id;'
@@ -479,7 +495,7 @@ def add_product_ingredient(product_id):
             return redirect(url_for('users.product_management'))
 
 
-    return render_template('add_product_ingredient.html', product_ingredients=product_ingredients, ingredient_items=ingredient_items, product_name=product_name, form=form)
+    return render_template('add_product_ingredient.html', product_ingredients=product_ingredients, ingredient_items=ingredient_items, product=product, form=form)
 
 @users.route("/order_management")
 @login_required
