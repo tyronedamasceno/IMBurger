@@ -102,61 +102,37 @@
 
 {% endif %}
 
+
 <div class="container mt-3">
   <div id="produtos-wrapper">
     <div class="p-3 mb-2 bg-success text-white">
       <h1 style="font-size: 20px;">Nossos produtos...</h1>
     </div>
+    
+
     <div class="row">
+      {% for product in products_homes %}
       <div class="col-md-12 my-2">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">Coca Cola 1 Litro</h4>
-            <p class="card-text">1 litro de coca cola</p>
+            <h4 class="card-title">{{ product['name'] }}</h4>
+            <p class="card-text">{{ product['description'] }}</p>
             <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$ 2,90</small>
+              <small class="text-muted" style="font-size: 18px;">R$
+                {{ "%.2f"|format(product['price']) }}</small>
             </p>
           </div>
           <div class="card-footer text-muted">
-            <button type="button" class="btn btn-dark">
+            <button type="button" class="btn btn-primary">
               <i class="fas fa-plus mr-2"></i>Adicionar
             </button>
+
           </div>
         </div>
       </div>
-      <div class="col-md-12 mb-2">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Hamburger Convencional</h4>
-            <p class="card-text">2 pães, 1 carne bovina e 1 salada</p>
-            <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$ 6,90</small>
-            </p>
-          </div>
-          <div class="card-footer text-muted">
-            <button type="button" class="btn btn-dark">
-              <i class="fas fa-plus mr-2"></i>Adicionar
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class=" col-md-12 mb-2">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Hamburguer X2</h4>
-            <p class="card-text">2 pães, 2 carnes bovinas, 1 salada</p>
-            <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$ 2,90</small>
-            </p>
-          </div>
-          <div class="card-footer text-muted">
-            <button type="button" class="btn btn-dark">
-              <i class="fas fa-plus mr-2"></i>Adicionar
-            </button>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
+
   </div>
 </div>
 
