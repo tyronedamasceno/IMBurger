@@ -517,7 +517,61 @@ def order_management():
             return redirect(url_for('users.home'))
         else:
             return redirect(url_for('users.stock_management'))
-    return render_template('order_management.html')
+
+    conn = db.engine.connect()
+
+    select_order_list_sql = (
+        'SELECT "order".id AS "order_id", customer.id AS "customer_id", user.username, "order".status FROM "order" INNER JOIN customer ON "order".customer_id = customer.id INNER JOIN user ON customer.user_id = user.id'
+    )
+    result = conn.execute(
+        select_order_list_sql
+    )
+
+    order_list = result
+
+    return render_template('order_management.html', order_list = order_list)
+
+@users.route("/order_management/<int:order_id>", methods=['GET', 'POST'])
+@login_required
+def order_item_management(order_id):
+    if session['user_type'] != 2:
+        if session['user_type'] == 1:
+            return redirect(url_for('users.home'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+    conn = db.engine.connect()
+
+    select_order_item_sql = (
+        'SELECT order_products.order_id, "order".status, product.name, product.price, order_products.quantity, order_products.notes FROM order_products INNER JOIN product ON order_products.product_id = product.id INNER JOIN "order" ON order_products.order_id = "order".id WHERE order_products.order_id=1;'
+    )
+    result = conn.execute(
+        select_order_item_sql
+    )
+
+    order_item = result.fetchall()
+
+    status = order_item[0]['status']
+
+    form = forms.UpdateOrderStatusForm()
+
+    if form.validate_on_submit():
+
+        order_status = form.order_status.data 
+
+        update_order_item_sql = (
+            'UPDATE "order" SET status=:order_status WHERE id = :order_id'
+        )
+        conn.execute(
+            update_order_item_sql,
+            order_status=order_status, order_id=order_id
+        )
+            
+        return redirect(url_for('users.order_management'))
+    elif request.method == 'GET':
+        form.order_status.data = status
+
+    return render_template('order_item_management.html', form=form, order_item=order_item)
 
 @users.route("/stock_management")
 @login_required

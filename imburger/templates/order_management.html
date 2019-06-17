@@ -3,42 +3,25 @@
 <div class="container mt-3">
   <div id="produtos-wrapper">
     <div class="row">
+
+      {% for order_item in order_list %}
       <div class="col-md-6 mb-2">
         <div class="card">
           <div class="card-header bg-success text-white">
-            <h1 style="font-size: 22px;"> Pedido #42582 (Saiu para a Entrega) </h1>
+            <h1 style="font-size: 22px;"> Pedido
+              # {{ order_item['order_id']}}
+              ({% if order_item['status'] == 0 %}Preparando{% elif order_item['status'] == 1 %}Saiu para a
+              entrega{% elif order_item['status'] == 2 %}Cancelada{% else %}Finalizado{% endif %})
+            </h1>
           </div>
           <div class="card-body">
-            <p> <b> Cliente: </b> usuario123 </p>
-            <p> <b> Resumo: </b> 2 x Coca Cola 1 Litro, 1 x Batata Frita... </p>
-            <button type="button" class="btn btn-info">Gerenciar Pedido</button>
+            <p> <b> Cliente: </b> {{ order_item['username'] }}</p>
+            <a href="{{ url_for('users.order_item_management', order_id=order_item['order_id']) }}"
+              class="btn btn-info">Gerenciar Pedido</a>
           </div>
         </div>
       </div>
-      <div class="col-md-6 mb-2">
-        <div class="card">
-          <div class="card-header bg-success text-white">
-            <h1 style="font-size: 22px;"> Pedido #42581 (Finalizado) </h1>
-          </div>
-          <div class="card-body">
-            <p> <b> Cliente: </b> usuario123 </p>
-            <p> <b> Resumo: </b> 1 x Coca Cola 2 Litros, 1 x Hamburguer X3 </p>
-            <button type="button" class="btn btn-info">Gerenciar Pedido</button>
-          </div>
-        </div>
-      </div>
-      <div class=" col-md-6 mb-2">
-        <div class="card">
-          <div class="card-header bg-success text-white">
-            <h1 style="font-size: 22px;"> Pedido #42580 (Finalizado) </h1>
-          </div>
-          <div class="card-body">
-            <p> <b> Cliente: </b> usuario123 </p>
-            <p> <b> Resumo: </b> 1 x Suco de Laranja </p>
-            <button type="button" class="btn btn-info">Gerenciar Pedido</button>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </div>

@@ -1,0 +1,77 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container mt-3">
+  <div id="produtos-wrapper">
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <div class="card">
+          <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="card-header bg-success text-white">
+              <h1 style="font-size: 22px;"> Pedido #{{ order_item[0]['order_id'] }} </h1>
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 30%;">Produto</th>
+                    <th scope="col" style="width: 20%;">Quantidade</th>
+                    <th scope="col" style="width: 30%;">Preço (Total) </th>
+                    <th scope="col" style="width: 20%;">Observações</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% set final_price = [0] %}
+                  {% for order_product in order_item %}
+                  <tr>
+                    <td>{{ order_product['name'] }}</td>
+                    <td>{{ order_product['quantity'] }}</td>
+                    <td>R$ {{ "%.2f"|format(order_product['price']*order_product['quantity']) }}</td>
+                    <td> {{ order_product['notes'] }} </td>
+                  </tr>
+                  {% if final_price.append(final_price.pop() + (order_product['price']*order_product['quantity'])) %}{% endif %}
+                  {% endfor %}
+
+                  <td colspan="2"> <b> Total Pago: </b> </td>
+                  <td colspan="2"> <b> R$ {{ "%.2f"|format(final_price[0]) }} </b> </td>
+                  <tr>
+                  </tr>
+                  <td colspan="2"> <b> Status: </b> </td>
+                  <td colspan="2" class="text-center">
+
+                    <div class="form-group">
+
+                      {% if form.order_status.errors %}
+                      {{ form.order_status(class="form-control is-invalid") }}
+                      <div class="invalid-input-feedback">
+                        {% for error in form.order_status.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                      {% else %}
+                      {{ form.order_status(class="form-control") }}
+                      {% endif %}
+                    </div>
+
+                  </td>
+                  <tr>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-success mb-2"><i class="fas fa-save mr-2"></i>Atualizar
+                Pedido</button>
+              <a href="{{ url_for('users.order_management') }}" class="btn btn-info mb-2"><i
+                  class="fas fa-arrow-left mr-2"></i>Voltar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

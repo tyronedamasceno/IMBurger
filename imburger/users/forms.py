@@ -105,3 +105,6 @@ class AddProductIngredientForm(FlaskForm):
     ingredient_id = SelectField('Novo ingrediente', coerce=int, choices=[])
     quantity = FloatField('Quantidade', validators=[
         InputRequired(message="Campo obrigatorio"), NumberRange(min=0.0, message="A quantidade não pode ser negativa")])
+
+class UpdateOrderStatusForm(FlaskForm):
+    order_status = SelectField('Status',  coerce=int, choices=[(0,"Preparando"),(1,"Saiu para a entrega"),(2,"Cancelado"), (3,"Finalizado")])
