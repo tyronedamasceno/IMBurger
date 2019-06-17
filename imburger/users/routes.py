@@ -104,6 +104,7 @@ def register():
             trans.commit()
         except:
             trans.rollback()
+            flash('Ocorreu uma falha durante a transação!', 'warning')
 
         flash('Sua conta foi criada com sucesso!', 'success')
         return redirect(url_for('users.login'))
@@ -239,6 +240,7 @@ def my_profile():
             trans.commit()
         except:
             trans.rollback()
+            flash('Ocorreu uma falha durante a transação!', 'warning')
 
         flash('Sua conta foi atualizada com sucesso', 'success')
         return redirect(url_for('users.my_profile'))
@@ -305,6 +307,7 @@ def add_product():
             trans.commit()
         except:
             trans.rollback()
+            flash('Ocorreu uma falha durante a transação!', 'warning')
         return redirect(url_for('users.product_management'))
     
     return render_template('add_product.html', form=form)
@@ -388,6 +391,7 @@ def delete_product(product_id):
         trans.commit()
     except:
         trans.rollback()
+        flash('Ocorreu uma falha durante a transação!', 'warning')
 
     return redirect(url_for('users.product_management'))
 
@@ -506,6 +510,7 @@ def delete_product_ingredient(product_id, ingredient_id):
         trans.commit()
     except:
         trans.rollback()
+        flash('Ocorreu uma falha durante a transação!', 'warning')
 
     return redirect(url_for('users.add_product_ingredient', product_id=product_id))
 
@@ -614,32 +619,40 @@ def edit_stock(stock_id):
     )
 
     stock_item = result.fetchone()
+    conn.close()
 
     form = forms.EditStockForm()
 
     if form.validate_on_submit():
-
         quantity = form.quantity.data
         name = form.name.data
         unit_measuring = form.unit_measuring.data
 
-        update_stock_sql = (
-            'UPDATE stock SET quantity = :quantity WHERE id = :stock_id'
-        )
-        conn.execute(
-            update_stock_sql,
-            quantity=quantity, stock_id=stock_id
-        )
+        conn = db.engine.connect()
+        trans = conn.begin()
 
-        update_stock_sql = (
-            'UPDATE ingredient SET name = :name, unit_measuring = :unit_measuring WHERE id = :ingredient_id'
-        )
-        conn.execute(
-            update_stock_sql,
-            name=name, unit_measuring=unit_measuring, 
-            ingredient_id=stock_item['ingredient_id']
-        )
-            
+        try:
+            update_stock_sql = (
+                'UPDATE stock SET quantity = :quantity WHERE id = :stock_id'
+            )
+            conn.execute(
+                update_stock_sql,
+                quantity=quantity, stock_id=stock_id
+            )
+
+            update_stock_sql = (
+                'UPDATE ingredient SET name = :name, unit_measuring = :unit_measuring WHERE id = :ingredient_id'
+            )
+            conn.execute(
+                update_stock_sql,
+                name=name, unit_measuring=unit_measuring,
+                ingredient_id=stock_item['ingredient_id']
+            )
+            trans.commit()
+        except:
+            trans.rollback()
+            flash('Ocorreu uma falha durante a transação!', 'warning')
+
         return redirect(url_for('users.stock_management'))
     elif request.method == 'GET':
         form.name.data = stock_item['name']
@@ -692,5 +705,6 @@ def add_ingredient():
             trans.commit()
         except:
             trans.rollback()
+            flash('Ocorreu uma falha durante a transação!', 'warning')
         return redirect(url_for('users.stock_management'))
     return render_template('add_ingredient.html', form=form)
