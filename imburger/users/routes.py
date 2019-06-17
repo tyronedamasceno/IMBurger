@@ -16,9 +16,9 @@ users = Blueprint('users', __name__)
 @users.route("/")
 @users.route("/home")
 def home():
-    if session['user_type'] == 2:
+    if session.get('user_type') == 2:
         return redirect(url_for('users.order_management'))
-    elif session['user_type'] == 3:
+    elif session.get('user_type') == 3:
         return redirect(url_for('users.stock_management'))
 
     return render_template('home.html', home_page=True, title='Inicio')
