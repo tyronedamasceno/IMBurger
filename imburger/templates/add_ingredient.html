@@ -1,0 +1,71 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container mt-3">
+  <div id="produto-wrapper">
+
+    <div class="row">
+      <div class="col-md-12 my-2">
+        <form method="POST" action="">
+          {{ form.hidden_tag() }}
+          <div class="card">
+            <div class="card-body">
+
+              <div class="form-group">
+                {{ form.name.label(class="font-weight-bold") }}
+
+                {% if form.name.errors %}
+                {{ form.name(class="form-control is-invalid") }}
+                <div class="invalid-input-feedback">
+                  {% for error in form.name.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.name(class="form-control") }}
+                {% endif %}
+              </div>
+
+              <div class="form-group">
+                {{ form.unit_measuring.label(class="font-weight-bold") }}
+
+                {% if form.unit_measuring.errors %}
+                {{ form.unit_measuring(class="form-control is-invalid") }}
+                <div class="invalid-input-feedback">
+                  {% for error in form.unit_measuring.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.unit_measuring(class="form-control") }}
+                {% endif %}
+              </div>
+
+              <div class="form-group">
+                {{ form.initial_quantity.label(class="font-weight-bold") }}
+
+                {% if form.initial_quantity.errors %}
+                {{ form.initial_quantity(class="form-control is-invalid") }}
+                <div class="invalid-input-feedback">
+                  {% for error in form.initial_quantity.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.initial_quantity(class="form-control") }}
+                {% endif %}
+              </div>
+            </div>
+            <div class="card-footer text-muted">
+              <button type="submit" class="btn btn-success mb-2"><i class="fas fa-plus mr-2"></i>Adicionar
+                ingrediente</button>
+              <a href="{{url_for('users.stock_management')}}" class="btn btn-primary mb-2"><i
+                  class="fas fa-backspace mr-2"></i>Cancelar</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

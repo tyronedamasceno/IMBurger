@@ -1,8 +1,90 @@
 {% extends "layout.html" %} {% block content %}
 
+{% if current_user.is_authenticated %}
+<div class="container-fluid">
+  <h2 class="text-center text-secondary my-3">Pedidos favoritos</h2>
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner row w-100 mx-auto">
+      <div class="carousel-item col-sm-12 col-md-6 col-lg-4 active">
+        <div class="card" style="height: 280px;">
+          <div class="card-body">
+            <h4 class="card-title">Hamburguer X3</h4>
+            <p class="card-text">2 pães, 3 carnes bovinas, salada, tomate e alface. </p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 16px;">R$ 9,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-plus mr-2"></i>Adicionar</button>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item col-sm-12 col-md-6 col-lg-4">
+        <div class="card" style="height: 280px;">
+          <div class="card-body">
+            <h4 class="card-title">Coca Cola 2 Litros</h4>
+            <p class="card-text">2 Litros de coca cola</p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 16px;">R$ 4,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-plus mr-2"></i>Adicionar</button>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item col-sm-12 col-md-6 col-lg-4">
+        <div class="card" style="height: 280px;">
+          <div class="card-body">
+            <h4 class="card-title">Hamburguer Ultra</h4>
+            <p class="card-text">2 pães, 1 queijo, 2 carnes, 1 molho especial </p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 16px;">R$ 12,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-plus mr-2"></i>Adicionar</button>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item col-sm-12 col-md-6 col-lg-4">
+        <div class="card" style="height: 280px;">
+          <div class="card-body">
+            <h4 class="card-title">Coca Cola 1 Litro</h4>
+            <p class="card-text">1 litro de coca cola</p>
+            <p class="card-text">
+              <small class="text-muted" style="font-size: 16px;">R$ 2,90</small>
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-plus mr-2"></i>Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center mt-4">
+          <a class="btn btn-outline-secondary mx-1 prev" href="javascript:void(0)" title="Previous">
+            <i class="fa fa-lg fa-chevron-left"></i>
+          </a>
+          <a class="btn btn-outline-secondary mx-1 next" href="javascript:void(0)" title="Next">
+            <i class="fa fa-lg fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+
 <div class="container">
   <div class="jumbotron mt-4">
-    <h1 class="display-5">Conheça o ImBurgeria Delivery</h1>
+    <h1 class="display-5">Conheça a ImBurgeria Delivery</h1>
     <p class="lead">
       A ImBurgeria Delivery oferece os melhores produtos pelos menores preços.
       Navegue pelo site para conhecer nossas ofertas!
@@ -18,61 +100,39 @@
   </div>
 </div>
 
+{% endif %}
+
+
 <div class="container mt-3">
   <div id="produtos-wrapper">
     <div class="p-3 mb-2 bg-success text-white">
       <h1 style="font-size: 20px;">Nossos produtos...</h1>
     </div>
+    
+
     <div class="row">
+      {% for product in products_homes %}
       <div class="col-md-12 my-2">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">Coca Cola 1 Litro</h4>
-            <p class="card-text">1 litro de coca cola</p>
+            <h4 class="card-title">{{ product['name'] }}</h4>
+            <p class="card-text">{{ product['description'] }}</p>
             <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$ 2,90</small>
+              <small class="text-muted" style="font-size: 18px;">R$
+                {{ "%.2f"|format(product['price']) }}</small>
             </p>
           </div>
           <div class="card-footer text-muted">
-            <button type="button" class="btn btn-dark">
+            <button type="button" class="btn btn-primary">
               <i class="fas fa-plus mr-2"></i>Adicionar
             </button>
+
           </div>
         </div>
       </div>
-      <div class="col-md-12 mb-2">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Hamburger Convencional</h4>
-            <p class="card-text">2 pães, 1 carne bovina e 1 salada</p>
-            <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$ 6,90</small>
-            </p>
-          </div>
-          <div class="card-footer text-muted">
-            <button type="button" class="btn btn-dark">
-              <i class="fas fa-plus mr-2"></i>Adicionar
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class=" col-md-12 mb-2">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Hamburguer X2</h4>
-            <p class="card-text">2 pães, 2 carnes bovinas, 1 salada</p>
-            <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$ 2,90</small>
-            </p>
-          </div>
-          <div class="card-footer text-muted">
-            <button type="button" class="btn btn-dark">
-              <i class="fas fa-plus mr-2"></i>Adicionar
-            </button>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
+
   </div>
 </div>
 

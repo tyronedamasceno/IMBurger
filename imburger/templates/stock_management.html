@@ -1,0 +1,39 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container mt-3">
+  <div id="estoque-wrapper">
+    <div class="text-center">
+      <a href="{{ url_for('users.add_ingredient') }}" class="btn btn-dark btn-lg btn-block"><i
+          class="fas fa-plus mr-2"></i>Adicionar novo ingrediente</a>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col" style="">Ingrediente</th>
+              <th scope="col" style="">Quantidade</th>
+              <th scope="col" style="width: 10%;" class="text-center">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock_item in stock_items %}
+            <tr>
+              <td>{{ stock_item['name'] }}</td>
+              <td>{{ stock_item['quantity'] }} {{ stock_item['unit_measuring'] }}</td>
+              <td>
+                <a href="{{ url_for('users.edit_stock', stock_id=stock_item['id']) }}"
+                  class="btn btn-primary btn-block font-weight-bold">Editar</a>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
