@@ -26,7 +26,7 @@ def home():
     select_products_sql = ('SELECT * FROM product')
     result = conn.execute(select_products_sql)
 
-    return render_template('home.html', home_page=True, title='Inicio',  products_homes = result)
+    return render_template('home.html', home_page=True, title='Inicio',  products_homes = result.fetchall())
 
 
 @users.route("/about")

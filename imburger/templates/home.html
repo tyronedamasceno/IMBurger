@@ -111,26 +111,30 @@
     
 
     <div class="row">
-      {% for product in products_homes %}
-      <div class="col-md-12 my-2">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">{{ product['name'] }}</h4>
-            <p class="card-text">{{ product['description'] }}</p>
-            <p class="card-text">
-              <small class="text-muted" style="font-size: 18px;">R$
-                {{ "%.2f"|format(product['price']) }}</small>
-            </p>
-          </div>
-          <div class="card-footer text-muted">
-            <button type="button" class="btn btn-primary">
-              <i class="fas fa-plus mr-2"></i>Adicionar
-            </button>
+      {% if products_homes %}
+        {% for product in products_homes %}
+        <div class="col-md-12 my-2">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">{{ product['name'] }}</h4>
+              <p class="card-text">{{ product['description'] }}</p>
+              <p class="card-text">
+                <small class="text-muted" style="font-size: 18px;">R$
+                  {{ "%.2f"|format(product['price']) }}</small>
+              </p>
+            </div>
+            <div class="card-footer text-muted">
+              <button type="button" class="btn btn-primary">
+                <i class="fas fa-plus mr-2"></i>Adicionar
+              </button>
 
+            </div>
           </div>
         </div>
-      </div>
-      {% endfor %}
+        {% endfor %}
+      {% else %}
+        AAAAAAAAAAAAAAAAAAAAAAAAAaa
+      {% endif %}
     </div>
 
   </div>
