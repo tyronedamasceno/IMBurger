@@ -199,3 +199,9 @@ dmypy.json
 .history
 
 # End of https://www.gitignore.io/api/flask,python,visualstudiocode
+
+# Static img files
+*.jpg
+*.jpeg
+*.png
+
