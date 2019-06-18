@@ -18,6 +18,7 @@
             </tr>
           </thead>
           <tbody>
+            {% if stock_items %}
             {% for stock_item in stock_items %}
             <tr>
               <td>{{ stock_item['name'] }}</td>
@@ -28,6 +29,11 @@
               </td>
             </tr>
             {% endfor %}
+            {% else %}
+            <tr>
+              <td class="font-weight-bold" colspan="3">Não há ingredientes cadastrados no estoque...</td>
+            </tr>
+            {% endif %}
 
           </tbody>
         </table>

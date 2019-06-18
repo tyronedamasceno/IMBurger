@@ -26,7 +26,7 @@ def home():
     select_products_sql = ('SELECT * FROM product')
     result = conn.execute(select_products_sql)
 
-    return render_template('home.html', home_page=True, title='Inicio',  products_homes = result.fetchall())
+    return render_template('home.html', home_page=True, title='Inicio',  product_items = result.fetchall())
 
 
 @users.route("/about")
@@ -429,7 +429,7 @@ def add_product_ingredient(product_id):
         product_id=product_id
     )
 
-    product_ingredients = result
+    product_ingredients = result.fetchall()
 
     select_ingredients_sql = (
         'SELECT * from ingredient'
@@ -601,7 +601,7 @@ def stock_management():
         select_stock_items_sql
     )
 
-    return render_template('stock_management.html', stock_items = result)
+    return render_template('stock_management.html', stock_items = result.fetchall())
 
 @users.route("/stock_management/<int:stock_id>", methods=['GET', 'POST'])
 @login_required
