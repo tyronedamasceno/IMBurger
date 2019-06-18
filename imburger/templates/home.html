@@ -111,23 +111,21 @@
 
 
     <div class="row">
-      {% if products_homes %}
-      {% for product in products_homes %}
+      {% if product_items %}
+      {% for product_item in product_items %}
       <div class="col-md-12 my-2">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">{{ product['name'] }}</h4>
-            <p class="card-text">{{ product['description'] }}</p>
+            <h4 class="card-title">{{ product_item['name'] }}</h4>
+            <p class="card-text">{{ product_item['description'] }}</p>
             <p class="card-text">
               <small class="text-muted" style="font-size: 18px;">R$
-                {{ "%.2f"|format(product['price']) }}</small>
+                {{ "%.2f"|format(product_item['price']) }}</small>
             </p>
           </div>
           <div class="card-footer text-muted">
-            <button type="button" class="btn btn-primary">
-              <i class="fas fa-plus mr-2"></i>Adicionar
-            </button>
-
+            <a href="{{ url_for('users.add_product_to_cart', product_id=product_item['id'], product_name=product_item['name'], product_price=product_item['price']) }}"
+              class="btn btn-primary"> <i class="fas fa-plus mr-2"></i>Adicionar</a>
           </div>
         </div>
       </div>

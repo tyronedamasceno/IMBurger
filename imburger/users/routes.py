@@ -28,6 +28,33 @@ def home():
 
     return render_template('home.html', home_page=True, title='Inicio',  product_items = result.fetchall())
 
+users.route("/")
+@users.route("/add_product_to_cart/<int:product_id>/<string:product_name>/<float:product_price>")
+@login_required
+def add_product_to_cart(product_id, product_name, product_price):
+    if session['user_type'] != 1:
+        if session['user_type'] == 2:
+            return redirect(url_for('users.order_management'))
+        else:
+            return redirect(url_for('users.stock_management'))
+
+    # Criar um array associativo com as informações do produto, algumas das informações serão uteis para mostrar o carrinho de compras atual e outras serão úteis na hora de adicionar linhas na tabela order_products (FEITO)
+
+    added_product = {"product_id" : product_id, "product_name" : product_name, "product_price" : product_price, "quantity" : 1}
+
+    # Verificar se dentro do array de arrays associativos da sessão já existe um elemento com a chave "product_id" igual ao valor product_id passado como argumento (NAO CONSEGUI FAZER)
+
+    # Caso nao exista, adicionar esse novo array associativo a sessao
+
+    # Exemplo: session['cart'].append(product_item)
+
+    # Caso exista, atualizar o valor da chave "quantity" deste elemento acrescentando um ao mesmo
+
+    # Exemplo: session['cart'][2]["quantity"] = session['cart'][2]["quantity"] + 1
+
+
+    return redirect(url_for('users.home'))
+
 
 @users.route("/about")
 def about():
