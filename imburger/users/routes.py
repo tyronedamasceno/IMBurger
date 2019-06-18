@@ -28,7 +28,6 @@ def home():
 
     return render_template('home.html', home_page=True, title='Inicio',  product_items = result.fetchall())
 
-users.route("/")
 @users.route("/add_product_to_cart/<int:product_id>/<string:product_name>/<float:product_price>")
 @login_required
 def add_product_to_cart(product_id, product_name, product_price):
