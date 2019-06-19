@@ -19,6 +19,7 @@
               </tr>
             </thead>
             <tbody>
+              {% if product_ingredients %}
               {% for product_ingredient in product_ingredients %}
               <tr>
                 <td>{{ product_ingredient['name'] }}</td>
@@ -32,6 +33,11 @@
                 </td>
               </tr>
               {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="3"> Não há ingredientes cadastrados para este produto... </td>
+              </tr>
+              {% endif %}
             </tbody>
           </table>
 

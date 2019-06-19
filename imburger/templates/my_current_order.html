@@ -1,0 +1,80 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container mt-3">
+    <div id="produtos-wrapper">
+        <form>
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h1 style="font-size: 22px;"> Meu Pedido </h1>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 45%;">Produto</th>
+                                <th scope="col" style="width: 15%;">Quantidade</th>
+                                <th scope="col" style="width: 20%;">Preço</th>
+                                <th scope="col" style="width: 20%;" class="text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Coca Cola 1 Litro</td>
+                                <td>
+                                    <div class="form-group" style="max-width: 70px;">
+                                        <select class="form-control" id="exampleFormControlSelect1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>R$ 5,80</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger">Remover</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Batata Frita</td>
+                                <td>
+                                    <div class="form-group" style="max-width: 70px;">
+                                        <select class="form-control" id="exampleFormControlSelect1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>R$ 5,50</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger">Remover</button>
+                                </td>
+                            </tr>
+                            <td colspan="2"> <b> Total a pagar: </b> </td>
+                            <td colspan="2"> <b> R$ 11,30 </b> </td>
+                            <tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 my-2">
+                            <button type="button" class="btn btn-success btn-block">Finalizar Pedido<i
+                                    class="fas fa-clipboard-check fa-lg ml-2"></i></button>
+                        </div>
+                        <div class="col-md-6 col-lg-4 my-2">
+                            <button type="button" class="btn btn-primary btn-block">Continuar Comprando<i
+                                    class="fas fa-shopping-cart fa-lg ml-2"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
