@@ -579,14 +579,17 @@ def order_item_management(order_id):
     conn = db.engine.connect()
 
     select_order_item_sql = (
-        'SELECT order_products.order_id, "order".status, product.name, product.price, order_products.quantity, order_products.notes FROM order_products INNER JOIN product ON order_products.product_id = product.id INNER JOIN "order" ON order_products.order_id = "order".id WHERE order_products.order_id=1;'
+        'SELECT order_products.order_id, "order".status, product.name, product.price, order_products.quantity, order_products.notes FROM order_products INNER JOIN product ON order_products.product_id = product.id INNER JOIN "order" ON order_products.order_id = "order".id WHERE order_products.order_id=:order_id;'
     )
     result = conn.execute(
-        select_order_item_sql
+        select_order_item_sql,
+        order_id=order_id
     )
 
     order_item = result.fetchall()
-
+    if not order_item:
+        flash('Ocorreu um problema com seu pedido', 'warning')
+        return redirect(url_for('users.order_management'))
     status = order_item[0]['status']
 
     form = forms.UpdateOrderStatusForm()
